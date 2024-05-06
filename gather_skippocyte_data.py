@@ -13,7 +13,7 @@ data_dirs = [
     "/media/ssd2/dh_labelled_data/DeepHeme2/BMA/cartridge_1",
     "/media/hdd3/neo/LabelledBMASkippocytes",
 ]
-save_dir = ""
+save_dir = "media/hdd3/neo/skippocyte_data"
 
 skipped_classes = ["BLR", "SKP", "ER5", "ER6", "U4", "U1", "PL2", "PL3"]
 
