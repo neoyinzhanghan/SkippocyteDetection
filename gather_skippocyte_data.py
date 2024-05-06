@@ -38,9 +38,18 @@ current_idx = 0
 for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
     for label in tqdm(os.listdir(data_dir), desc="Processing Labels"):
 
+        # make sure the label is a directory
+        if not os.path.isdir(os.path.join(data_dir, label)):
+            continue
+
         # if label contains other, Other, the label should be moved to bad
         if "other" in label.lower():
             for img in os.listdir(os.path.join(data_dir, label)):
+
+                # make sure the img is an image file
+                if not img.endswith(".jpg"):
+                    continue
+
                 old_path = os.path.join(data_dir, label, img)
                 new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
                 shutil.copyfile(old_path, new_path)
@@ -54,6 +63,11 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
 
         if label in skipped_classes:
             for img in os.listdir(os.path.join(data_dir, label)):
+
+                # make sure the img is an image file
+                if not img.endswith(".jpg"):
+                    continue
+
                 old_path = os.path.join(data_dir, label, img)
                 new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
                 shutil.copyfile(old_path, new_path)
@@ -66,6 +80,11 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 current_idx += 1
         else:
             for img in os.listdir(os.path.join(data_dir, label)):
+
+                # make sure the img is an image file
+                if not img.endswith(".jpg"):
+                    continue
+
                 old_path = os.path.join(data_dir, label, img)
                 new_path = os.path.join(save_dir, "good", f"{current_idx}.jpg")
                 shutil.copyfile(old_path, new_path)
