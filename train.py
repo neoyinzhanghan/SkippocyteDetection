@@ -14,41 +14,34 @@ from torchmetrics import Accuracy, AUROC, F1Score
 
 
 def get_feat_extract_augmentation_pipeline(image_size):
-    # Define your Albumentations pipeline as before
-    transform = A.Compose(
-        [
-            A.Resize(image_size, image_size),
-            A.OneOf(
-                [
-                    A.ShiftScaleRotate(p=0.8),
-                    A.HorizontalFlip(p=0.5),
-                    A.VerticalFlip(p=0.5),
-                    A.Affine(shear=(-10, 10), p=0.3),
-                    A.ISONoise(color_shift=(0.01, 0.02), intensity=(0.05, 0.01), p=0.2),
-                ]
-            ),
-            A.OneOf(
-                [
-                    A.RandomBrightnessContrast(
-                        contrast_limit=0.4, brightness_by_max=0.4, p=0.5
-                    ),
-                    A.CLAHE(p=0.3),
-                    A.ColorJitter(p=0.2),
-                    A.RandomGamma(p=0.2),
-                ]
-            ),
-            ToTensorV2(),  # Ensures output is a PyTorch tensor
-        ]
-    )
+    # Define Albumentations transforms
+    transform = A.Compose([
+        A.Resize(image_size, image_size),
+        A.OneOf([
+            A.ShiftScaleRotate(p=0.8),
+            A.HorizontalFlip(p=0.5),
+            A.VerticalFlip(p=0.5),
+            A.Affine(shear=(-10, 10), p=0.3),
+            A.ISONoise(color_shift=(0.01, 0.02), intensity=(0.05, 0.01), p=0.2),
+        ]),
+        A.OneOf([
+            A.RandomBrightnessContrast(contrast_limit=0.4, brightness_by_max=0.4, p=0.5),
+            A.CLAHE(p=0.3),
+            A.ColorJitter(p=0.2),
+            A.RandomGamma(p=0.2),
+        ]),
+        ToTensorV2(),  # Ensures output is a PyTorch tensor
+    ])
 
-    # Wrapper to convert from PIL to NumPy and apply transformation
+    # Wrapper to handle the transformation
     def wrapper(image):
         image_np = np.array(image)  # Convert PIL image to NumPy array
+        if image_np.shape[-1] == 4:  # Check if the image is RGBA
+            image_np = image_np[..., :3]  # Convert RGBA to RGB by slicing off the alpha channel
         augmented = transform(image=image_np)  # Apply Albumentations
-        return augmented["image"]  # Return only the image tensor
+        return augmented['image']  # Return only the image tensor
 
-    return T.Lambda(wrapper)  # Wrap in a torchvision Lambda transform for compatibility
-
+    return T.Lambda(wrapper)  # Use a Lambda transform for compatibility
 
 class BinaryResNet(LightningModule):
     def __init__(self):
