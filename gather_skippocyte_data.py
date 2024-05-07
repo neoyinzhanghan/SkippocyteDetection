@@ -12,10 +12,11 @@ data_dirs = [
     "/media/ssd2/dh_labelled_data/DeepHeme2/PBS/labelled_cartridge_0",
     "/media/ssd2/dh_labelled_data/DeepHeme2/BMA/cartridge_1",
     "/media/hdd3/neo/LabelledBMASkippocytes",
+    "/media/hdd1/neo/blasts_normal_confirmed",
 ]
-save_dir = "/media/hdd3/neo/skippocyte_data"
+save_dir = "/media/hdd1/neo/blasts_skippocytes"
 
-skipped_classes = ["BLR", "SKP", "ER5", "ER6", "U4", "U1", "PL2", "PL3"]
+skipped_classes = ["ER5", "ER6", "U4", "U1", "PL2", "PL3"]
 
 os.makedirs(save_dir, exist_ok=True)
 os.makedirs(os.path.join(save_dir, "good"), exist_ok=True)
@@ -78,7 +79,7 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 metadata["good"].append(False)
 
                 current_idx += 1
-        else:
+        elif label == "M1":
             for img in os.listdir(os.path.join(data_dir, label)):
 
                 # make sure the img is an image file
