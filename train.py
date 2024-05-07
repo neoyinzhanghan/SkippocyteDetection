@@ -89,6 +89,7 @@ class BinaryResNet(LightningModule):
         )
         train_size = int(0.8 * len(dataset))
         val_size = len(dataset) - train_size
+
         self.train_dataset, self.val_dataset = random_split(
             dataset, [train_size, val_size]
         )
