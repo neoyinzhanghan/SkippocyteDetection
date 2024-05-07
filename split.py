@@ -3,8 +3,8 @@ import random
 from PIL import Image
 from tqdm import tqdm
 
-input_dir = "/media/hdd1/neo/blasts_normal_confirmed"
-save_dir = "/media/hdd1/neo/blasts_normal_confirmed_split"
+input_dir = "/media/hdd1/neo/blasts_skippocytes"
+save_dir = "/media/hdd1/neo/blasts_skippocytes_split"
 
 # create the save_dir if it doesn't exist
 if not os.path.exists(save_dir):
