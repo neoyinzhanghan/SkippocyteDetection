@@ -117,6 +117,7 @@ class BinaryResNet(LightningModule):
 
 if __name__ == "__main__":
     model = BinaryResNet()
+    model.prepare_data()
     logger = TensorBoardLogger("tb_logs", name="binary_resnet50")
     checkpoint_callback = ModelCheckpoint(monitor="val_loss", mode="min")
     trainer = Trainer(max_epochs=20, logger=logger, callbacks=[checkpoint_callback])
