@@ -14,7 +14,7 @@ data_dirs = [
     "/media/hdd3/neo/LabelledBMASkippocytes",
     "/media/hdd1/neo/blasts_normal_confirmed",
 ]
-save_dir = "/media/hdd1/neo/blasts_skippocytes"
+save_dir = "/media/hdd3/neo/blasts_skippocytes"
 
 skipped_classes = ["ER5", "ER6", "U4", "U1", "PL2", "PL3"]
 
