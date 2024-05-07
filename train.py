@@ -1,6 +1,8 @@
 import os
 import torch
 import torch.nn.functional as F
+import numpy as np
+from torchvision import transforms as T
 from torch.utils.data import DataLoader, random_split
 from torchvision import transforms, models, datasets
 import albumentations as A
@@ -12,37 +14,40 @@ from torchmetrics import Accuracy, AUROC, F1Score
 
 
 def get_feat_extract_augmentation_pipeline(image_size):
-    transform_shape = A.Compose(
-        [
-            A.ShiftScaleRotate(p=0.8),
-            A.HorizontalFlip(p=0.5),
-            A.VerticalFlip(p=0.5),
-            A.Affine(shear=(-10, 10), p=0.3),
-            A.ISONoise(
-                color_shift=(0.01, 0.02),
-                intensity=(0.05, 0.01),
-                always_apply=False,
-                p=0.2,
-            ),
-        ]
-    )
-    transform_color = A.Compose(
-        [
-            A.RandomBrightnessContrast(
-                contrast_limit=0.4, brightness_by_max=0.4, p=0.5
-            ),
-            A.CLAHE(p=0.3),
-            A.ColorJitter(p=0.2),
-            A.RandomGamma(p=0.2),
-        ]
-    )
-    return A.Compose(
+    # Define your Albumentations pipeline as before
+    transform = A.Compose(
         [
             A.Resize(image_size, image_size),
-            A.OneOf([transform_shape, transform_color]),
-            ToTensorV2(),
+            A.OneOf(
+                [
+                    A.ShiftScaleRotate(p=0.8),
+                    A.HorizontalFlip(p=0.5),
+                    A.VerticalFlip(p=0.5),
+                    A.Affine(shear=(-10, 10), p=0.3),
+                    A.ISONoise(color_shift=(0.01, 0.02), intensity=(0.05, 0.01), p=0.2),
+                ]
+            ),
+            A.OneOf(
+                [
+                    A.RandomBrightnessContrast(
+                        contrast_limit=0.4, brightness_by_max=0.4, p=0.5
+                    ),
+                    A.CLAHE(p=0.3),
+                    A.ColorJitter(p=0.2),
+                    A.RandomGamma(p=0.2),
+                ]
+            ),
+            ToTensorV2(),  # Ensures output is a PyTorch tensor
         ]
     )
+
+    # Wrapper to convert from PIL to NumPy and apply transformation
+    def wrapper(image):
+        image_np = np.array(image)  # Convert PIL image to NumPy array
+        augmented = transform(image=image_np)  # Apply Albumentations
+        return augmented["image"]  # Return only the image tensor
+
+    return T.Lambda(wrapper)  # Wrap in a torchvision Lambda transform for compatibility
 
 
 class BinaryResNet(LightningModule):
@@ -85,7 +90,8 @@ class BinaryResNet(LightningModule):
     def prepare_data(self):
         # Make sure to replace 'path_to_your_data' with the actual path to your dataset
         dataset = datasets.ImageFolder(
-            root="/media/hdd3/neo/skippocyte_data", transform=self.transform
+            root="/media/hdd3/neo/skippocyte_data",
+            transform=self.transform,  # This now handles conversion and augmentation correctly
         )
         train_size = int(0.8 * len(dataset))
         val_size = len(dataset) - train_size
