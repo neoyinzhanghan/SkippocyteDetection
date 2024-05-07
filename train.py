@@ -116,7 +116,9 @@ class BinaryResNet(LightningModule):
 
     def collate_fn(self, batch):
         imgs, targets = zip(*batch)
-        imgs = torch.stack([self.transform(image=img)["image"] for img in imgs])
+        imgs = torch.stack(
+            [self.transform(img) for img in imgs]
+        )  # Direct transformation without keyword
         targets = torch.tensor(targets)
         return imgs, targets
 
