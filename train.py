@@ -52,7 +52,7 @@ class BinaryResNet(LightningModule):
         num_features = self.model.fc.in_features
         self.model.fc = torch.nn.Linear(num_features, 1)
         self.accuracy = Accuracy(task="binary")
-        self.auroc = AUROC(num_classes=1)
+        self.auroc = AUROC(num_classes=1, task="binary")
         self.f1 = F1Score(num_classes=1, threshold=0.5)
         self.transform = get_feat_extract_augmentation_pipeline(96)
 
