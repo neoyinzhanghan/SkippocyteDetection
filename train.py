@@ -14,7 +14,7 @@ from torchmetrics import Accuracy, AUROC, F1Score
 
 
 def get_feat_extract_augmentation_pipeline(image_size):
-    # Define Albumentations transforms
+    # Albumentations pipeline, this part is fine as is
     albumentations_transform = A.Compose([
         A.Resize(image_size, image_size),
         A.ShiftScaleRotate(p=0.8),
@@ -29,16 +29,15 @@ def get_feat_extract_augmentation_pipeline(image_size):
         ToTensorV2()  # Converts to tensor and handles channel order
     ])
 
-    # Wrapper to handle the transformation and ensure RGB input
+    # Apply transformations, assuming input images are already PIL Images
     def wrapper(image):
         if image.mode != 'RGB':
             image = image.convert('RGB')  # Convert image to RGB if not already
         image_np = np.array(image)  # Convert PIL image to NumPy array
-        augmented = albumentations_transform(image=image_np)  # Apply Albumentations
-        return augmented['image']  # Return only the image tensor
+        augmented = albumentations_transform(image=image_np)
+        return augmented['image']  # Returns tensor
 
     return T.Lambda(wrapper)  # Use a Lambda transform for compatibility
-
 
 class BinaryResNet(LightningModule):
     def __init__(self):
@@ -104,11 +103,9 @@ class BinaryResNet(LightningModule):
             self.val_dataset, batch_size=32, num_workers=4, collate_fn=self.collate_fn
         )
 
-    def collate_fn(self, batch):
+    def collate_fn(batch):
         imgs, targets = zip(*batch)
-        imgs = torch.stack(
-            [self.transform(img) for img in imgs]
-        )  # Direct transformation without keyword
+        imgs = torch.stack([img for img in imgs])  # Assumption: images are already tensors
         targets = torch.tensor(targets)
         return imgs, targets
 
