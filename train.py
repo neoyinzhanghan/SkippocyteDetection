@@ -16,6 +16,7 @@ from torchmetrics import Accuracy, AUROC, F1Score
 def get_feat_extract_augmentation_pipeline(image_size):
     # Define Albumentations transforms
     albumentations_transform = A.Compose([
+        A.Resize(image_size, image_size),
         A.ShiftScaleRotate(p=0.8),
         A.HorizontalFlip(p=0.5),
         A.VerticalFlip(p=0.5),
@@ -25,16 +26,19 @@ def get_feat_extract_augmentation_pipeline(image_size):
         A.CLAHE(clip_limit=2.0, tile_grid_size=(8, 8), always_apply=False, p=0.3),
         A.ColorJitter(p=0.2),
         A.RandomGamma(p=0.2),
-        A.Resize(image_size, image_size),
+        ToTensorV2()  # Converts to tensor and handles channel order
     ])
 
-    # Using torchvision transforms to handle PIL Images and convert them to tensors
-    return T.Compose([
-        T.Lambda(lambda img: img.convert('RGB')),  # Convert image to RGB
-        T.ToPILImage(),
-        T.Lambda(lambda img: albumentations_transform(image=np.array(img))['image']),
-        ToTensorV2()  # Convert numpy array back to tensor
-    ])
+    # Wrapper to handle the transformation and ensure RGB input
+    def wrapper(image):
+        if image.mode != 'RGB':
+            image = image.convert('RGB')  # Convert image to RGB if not already
+        image_np = np.array(image)  # Convert PIL image to NumPy array
+        augmented = albumentations_transform(image=image_np)  # Apply Albumentations
+        return augmented['image']  # Return only the image tensor
+
+    return T.Lambda(wrapper)  # Use a Lambda transform for compatibility
+
 
 class BinaryResNet(LightningModule):
     def __init__(self):
