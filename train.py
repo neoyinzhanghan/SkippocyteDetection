@@ -10,8 +10,6 @@ from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
 from torchmetrics import Accuracy, AUROC, F1Score
 
-path_to_your_data = "/media/hdd3/neo/skippocyte_data"
-
 
 def get_feat_extract_augmentation_pipeline(image_size):
     transform_shape = A.Compose(
@@ -85,7 +83,10 @@ class BinaryResNet(LightningModule):
         return torch.optim.Adam(self.parameters(), lr=1e-3)
 
     def prepare_data(self):
-        dataset = datasets.ImageFolder(root=path_to_your_data)
+        # Make sure to replace 'path_to_your_data' with the actual path to your dataset
+        dataset = datasets.ImageFolder(
+            root="path_to_your_data", transform=self.transform
+        )
         train_size = int(0.8 * len(dataset))
         val_size = len(dataset) - train_size
         self.train_dataset, self.val_dataset = random_split(
@@ -115,7 +116,7 @@ class BinaryResNet(LightningModule):
 
 if __name__ == "__main__":
     model = BinaryResNet()
-    logger = TensorBoardLogger(save_dir="lightning_logs", name="binary_resnet50")
+    logger = TensorBoardLogger("tb_logs", name="binary_resnet50")
     checkpoint_callback = ModelCheckpoint(monitor="val_loss", mode="min")
     trainer = Trainer(max_epochs=20, logger=logger, callbacks=[checkpoint_callback])
     trainer.fit(model)
