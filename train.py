@@ -85,7 +85,7 @@ class BinaryResNet(LightningModule):
     def prepare_data(self):
         # Make sure to replace 'path_to_your_data' with the actual path to your dataset
         dataset = datasets.ImageFolder(
-            root="path_to_your_data", transform=self.transform
+            root="/media/hdd3/neo/skippocyte_data", transform=self.transform
         )
         train_size = int(0.8 * len(dataset))
         val_size = len(dataset) - train_size
