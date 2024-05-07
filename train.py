@@ -207,7 +207,7 @@ class ResNetModel(pl.LightningModule):
 # Main training loop
 def train_model(downsample_factor):
     data_module = ImageDataModule(
-        data_dir="/media/hdd3/neo/skippocyte_data_split",
+        data_dir="/media/hdd1/neo/blasts_skippocytes_split",
         batch_size=32,
         downsample_factor=downsample_factor,
     )
