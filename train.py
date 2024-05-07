@@ -53,7 +53,7 @@ class BinaryResNet(LightningModule):
         self.model.fc = torch.nn.Linear(num_features, 1)
         self.accuracy = Accuracy(task="binary")
         self.auroc = AUROC(num_classes=1, task="binary")
-        self.f1 = F1Score(num_classes=1, threshold=0.5)
+        self.f1 = F1Score(num_classes=1, threshold=0.5, task="binary")
         self.transform = get_feat_extract_augmentation_pipeline(96)
 
     def forward(self, x):
