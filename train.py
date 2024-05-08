@@ -33,7 +33,7 @@ def get_feat_extract_augmentation_pipeline(image_size):
                 intensity=(0.05, 0.01),
                 always_apply=False,
                 p=0.2,
-            ),
+            ), 
         ]
     )
     transform_color = A.Compose(
