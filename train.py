@@ -5,6 +5,7 @@ import torch.optim.lr_scheduler as lr_scheduler
 import torch.nn.functional as F
 import albumentations as A
 import numpy as np
+from PIL import Image
 from torchvision.transforms.functional import to_pil_image, to_tensor
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.utils.data import DataLoader
@@ -33,7 +34,7 @@ def get_feat_extract_augmentation_pipeline(image_size):
                 intensity=(0.05, 0.01),
                 always_apply=False,
                 p=0.2,
-            ), 
+            ),
         ]
     )
     transform_color = A.Compose(
@@ -269,16 +270,19 @@ if __name__ == "__main__":
     # Load the model
     model = load_model(checkpoint_path)
 
-    # Load the test dataset
-    data_module = ImageDataModule(
-        data_dir="/media/hdd2/neo/blasts_skippocytes_split",
-        batch_size=32,
-        downsample_factor=1,
-    )
-    data_module.setup()
+    # Traverse through the test set one by one using a for loop
 
-    # Evaluate the model on the test set
-    trainer = pl.Trainer()
+    test_data_dir = "/media/hdd2/neo/blasts_skippocytes_split/test"
 
-    result = trainer.test(model, datamodule=data_module)
-    print(result)
+    for cell_class in os.listdir(test_data_dir):
+        cell_class_dir = os.path.join(test_data_dir, cell_class)
+        for image_name in os.listdir(cell_class_dir):
+            image_path = os.path.join(cell_class_dir, image_name)
+            image = Image.open(image_path)
+
+            # Predict the image
+            prediction = predict_image(image, model)
+
+            print(
+                f"Image: {image_name}, Prediction: {prediction}, True Class: {cell_class}"
+            )
