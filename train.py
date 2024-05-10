@@ -268,7 +268,7 @@ if __name__ == "__main__":
     checkpoint_path = "/media/hdd2/neo/MODELS/2024-05-08 blast skippocyte v1/1/version_0/checkpoints/epoch=499-step=36500.ckpt"
 
     # Load the model
-    model = load_model(checkpoint_path)
+    model = load_model(checkpoint_path, num_classes=2, device="cuda")
 
     # Traverse through the test set one by one using a for loop
 
@@ -281,7 +281,7 @@ if __name__ == "__main__":
             image = Image.open(image_path)
 
             # Predict the image
-            prediction = predict_image(image, model)
+            prediction = predict_image(image, model, device="cuda")
 
             print(
                 f"Image: {image_name}, Prediction: {prediction}, True Class: {cell_class}"
