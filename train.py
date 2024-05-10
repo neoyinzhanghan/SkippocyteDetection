@@ -226,7 +226,59 @@ def train_model(downsample_factor):
     trainer.fit(model, data_module)
 
 
+def load_model(model_path, num_classes=2, device="cpu"):
+    # Load the model path based on the lightning checkpoint
+    model = ResNetModel.load_from_checkpoint(
+        checkpoint_path=model_path, num_classes=num_classes
+    )
+    model.eval()
+    return model
+
+
+def predict_image(image, model, device="cpu"):
+
+    # Preprocess image in to a tensor
+    image = transforms.ToTensor()(image)
+
+    # Move image to the appropriate device (CPU or GPU)
+    image = image.to(device)
+    model = model.to(device)
+
+    # Make predictions
+    with torch.no_grad():
+        # first add a batch dimension
+        image = image.unsqueeze(0)
+
+        # get the prediction
+        prediction = model(image)
+
+        # get the probability
+        probability = F.softmax(prediction, dim=1)
+
+    return probability[0][1].item()
+
+
 if __name__ == "__main__":
-    # Run training for each downsampling factor
-    for factor in [1]:
-        train_model(factor)
+    # # Run training for each downsampling factor
+    # for factor in [1]:
+    #     train_model(factor)
+
+    # now we wnat to evaluate the model on the test set
+    checkpoint_path = "/media/hdd2/neo/MODELS/2024-05-08 blast skippocyte v1/1/version_0/checkpoints/epoch=499-step=36500.ckpt"
+
+    # Load the model
+    model = load_model(checkpoint_path)
+
+    # Load the test dataset
+    data_module = ImageDataModule(
+        data_dir="/media/hdd2/neo/blasts_skippocytes_split",
+        batch_size=32,
+        downsample_factor=1,
+    )
+    data_module.setup()
+
+    # Evaluate the model on the test set
+    trainer = pl.Trainer()
+
+    result = trainer.test(model, datamodule=data_module)
+    print(result)
