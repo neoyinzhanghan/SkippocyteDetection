@@ -271,29 +271,29 @@ def predict_image(image, model, device="cpu"):
 
 
 if __name__ == "__main__":
-    # # Run training for each downsampling factor
-    # for factor in [1]:
-    #     train_model(factor)
+    # Run training for each downsampling factor
+    for factor in [1]:
+        train_model(factor)
 
-    # now we wnat to evaluate the model on the test set
-    checkpoint_path = "/media/hdd2/neo/MODELS/2024-05-08 blast skippocyte v1/1/version_0/checkpoints/epoch=499-step=36500.ckpt"
+    # # now we wnat to evaluate the model on the test set
+    # checkpoint_path = "/media/hdd2/neo/MODELS/2024-05-08 blast skippocyte v1/1/version_0/checkpoints/epoch=499-step=36500.ckpt"
 
-    # Load the model
-    model = load_model(checkpoint_path, num_classes=2, device="cuda")
+    # # Load the model
+    # model = load_model(checkpoint_path, num_classes=2, device="cuda")
 
-    # Traverse through the test set one by one using a for loop
+    # # Traverse through the test set one by one using a for loop
 
-    test_data_dir = "/media/hdd2/neo/blasts_skippocytes_split/test"
+    # test_data_dir = "/media/hdd2/neo/blasts_skippocytes_split/test"
 
-    for cell_class in os.listdir(test_data_dir):
-        cell_class_dir = os.path.join(test_data_dir, cell_class)
-        for image_name in os.listdir(cell_class_dir):
-            image_path = os.path.join(cell_class_dir, image_name)
-            image = Image.open(image_path)
+    # for cell_class in os.listdir(test_data_dir):
+    #     cell_class_dir = os.path.join(test_data_dir, cell_class)
+    #     for image_name in os.listdir(cell_class_dir):
+    #         image_path = os.path.join(cell_class_dir, image_name)
+    #         image = Image.open(image_path)
 
-            # Predict the image
-            prediction = predict_image(image, model, device="cuda")
+    #         # Predict the image
+    #         prediction = predict_image(image, model, device="cuda")
 
-            print(
-                f"Image: {image_name}, Prediction: {prediction}, True Class: {cell_class}"
-            )
+    #         print(
+    #             f"Image: {image_name}, Prediction: {prediction}, True Class: {cell_class}"
+    #         )
