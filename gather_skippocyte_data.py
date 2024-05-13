@@ -53,7 +53,7 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                     continue
 
                 old_path = os.path.join(data_dir, label, img)
-                new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
+                new_path = os.path.join(save_dir, "Skippocytes", f"{current_idx}.jpg")
                 shutil.copyfile(old_path, new_path)
 
                 metadata["idx"].append(current_idx)
@@ -71,7 +71,7 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                     continue
 
                 old_path = os.path.join(data_dir, label, img)
-                new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
+                new_path = os.path.join(save_dir, "Skippocytes", f"{current_idx}.jpg")
                 shutil.copyfile(old_path, new_path)
 
                 metadata["idx"].append(current_idx)
@@ -88,7 +88,7 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                     continue
 
                 old_path = os.path.join(data_dir, label, img)
-                new_path = os.path.join(save_dir, "good", f"{current_idx}.jpg")
+                new_path = os.path.join(save_dir, "Blasts", f"{current_idx}.jpg")
                 shutil.copyfile(old_path, new_path)
 
                 metadata["idx"].append(current_idx)
@@ -106,7 +106,7 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                     continue
 
                 old_path = os.path.join(data_dir, label, img)
-                new_path = os.path.join(save_dir, "good", f"{current_idx}.jpg")
+                new_path = os.path.join(save_dir, "OtherWBCs", f"{current_idx}.jpg")
                 shutil.copyfile(old_path, new_path)
 
                 metadata["idx"].append(current_idx)
