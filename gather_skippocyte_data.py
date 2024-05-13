@@ -14,13 +14,14 @@ data_dirs = [
     "/media/hdd3/neo/LabelledBMASkippocytes",
     "/media/hdd1/neo/blasts_normal_confirmed",
 ]
-save_dir = "/media/hdd3/neo/blasts_skippocytes"
+save_dir = "/media/hdd3/neo/blasts_skippocytes_others"
 
 skipped_classes = ["ER5", "ER6", "U4", "U1", "PL2", "PL3"]
 
 os.makedirs(save_dir, exist_ok=True)
-os.makedirs(os.path.join(save_dir, "good"), exist_ok=True)
-os.makedirs(os.path.join(save_dir, "bad"), exist_ok=True)
+os.makedirs(os.path.join(save_dir, "Blasts"), exist_ok=True)
+os.makedirs(os.path.join(save_dir, "Skippocytes"), exist_ok=True)
+os.makedirs(os.path.join(save_dir, "OtherWBCs"), exist_ok=True)
 
 # each data_dir in data_dirs contain a bunch of subdirectories, each containing images, the name of the subdirectory is the label
 # if the label is in skipped_classes, the images are shutil copied to the bad directory DO NOT MOVE THEM!
@@ -31,7 +32,7 @@ metadata = {
     "idx": [],
     "path": [],
     "label": [],
-    "good": [],
+    "class": [],
 }
 
 current_idx = 0
@@ -58,7 +59,7 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 metadata["idx"].append(current_idx)
                 metadata["path"].append(old_path)
                 metadata["label"].append(label)
-                metadata["good"].append(False)
+                metadata["class"].append("Skippocytes")
 
                 current_idx += 1
 
@@ -76,7 +77,7 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 metadata["idx"].append(current_idx)
                 metadata["path"].append(old_path)
                 metadata["label"].append(label)
-                metadata["good"].append(False)
+                metadata["class"].append("Skippocytes")
 
                 current_idx += 1
         elif label == "M1":
@@ -93,7 +94,25 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 metadata["idx"].append(current_idx)
                 metadata["path"].append(old_path)
                 metadata["label"].append(label)
-                metadata["good"].append(True)
+                metadata["class"].append("Blasts")
+
+                current_idx += 1
+
+        else:
+            for img in os.listdir(os.path.join(data_dir, label)):
+
+                # make sure the img is an image file
+                if not img.endswith(".jpg"):
+                    continue
+
+                old_path = os.path.join(data_dir, label, img)
+                new_path = os.path.join(save_dir, "good", f"{current_idx}.jpg")
+                shutil.copyfile(old_path, new_path)
+
+                metadata["idx"].append(current_idx)
+                metadata["path"].append(old_path)
+                metadata["label"].append(label)
+                metadata["class"].append("OtherWBCs")
 
                 current_idx += 1
 
