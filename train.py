@@ -154,7 +154,7 @@ class ImageDataModule(pl.LightningDataModule):
 
 # Model Module
 class ResNetModel(pl.LightningModule):
-    def __init__(self, num_classes=2, config=default_config):
+    def __init__(self, num_classes=3, config=default_config):
         super().__init__()
         self.model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
         self.model.fc = nn.Linear(self.model.fc.in_features, num_classes)
@@ -219,11 +219,11 @@ class ResNetModel(pl.LightningModule):
 # Main training loop
 def train_model(downsample_factor):
     data_module = ImageDataModule(
-        data_dir="/media/hdd2/neo/blasts_skippocytes_split",
+        data_dir="/media/hdd2/neo/blasts_skippocytes_others_split",
         batch_size=32,
         downsample_factor=downsample_factor,
     )
-    model = ResNetModel(num_classes=2)
+    model = ResNetModel(num_classes=3)
 
     # Logger
     logger = TensorBoardLogger("lightning_logs", name=str(downsample_factor))
@@ -238,7 +238,7 @@ def train_model(downsample_factor):
     trainer.fit(model, data_module)
 
 
-def load_model(model_path, num_classes=2, device="cpu"):
+def load_model(model_path, num_classes=3, device="cpu"):
     # Load the model path based on the lightning checkpoint
     model = ResNetModel.load_from_checkpoint(
         checkpoint_path=model_path, num_classes=num_classes
