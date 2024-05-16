@@ -45,7 +45,9 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
 
         # if label contains other, Other, the label should be moved to bad
         if "other" in label.lower():
-            for img in os.listdir(os.path.join(data_dir, label)):
+            for img in tqdm(
+                os.listdir(os.path.join(data_dir, label)), desc="Processing Images"
+            ):
 
                 # make sure the img is an image file
                 if not img.endswith(".jpg") and not img.endswith(".png"):
@@ -68,7 +70,9 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 current_idx += 1
 
         if label in skipped_classes:
-            for img in os.listdir(os.path.join(data_dir, label)):
+            for img in tqdm(
+                os.listdir(os.path.join(data_dir, label)), desc="Processing Images"
+            ):
 
                 # make sure the img is an image file
                 if not img.endswith(".jpg") and not img.endswith(".png"):
@@ -90,7 +94,9 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
 
                 current_idx += 1
         elif label == "M1":
-            for img in os.listdir(os.path.join(data_dir, label)):
+            for img in tqdm(
+                os.listdir(os.path.join(data_dir, label)), desc="Processing Images"
+            ):
 
                 # make sure the img is an image file, check jpg and png
                 if not (img.endswith(".jpg") and not img.endswith(".png")):
