@@ -49,12 +49,17 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
             for img in os.listdir(os.path.join(data_dir, label)):
 
                 # make sure the img is an image file
-                if not img.endswith(".jpg"):
+                if not img.endswith(".jpg") and not img.endswith(".png"):
                     continue
 
-                old_path = os.path.join(data_dir, label, img)
-                new_path = os.path.join(save_dir, "Skippocytes", f"{current_idx}.jpg")
-                shutil.copyfile(old_path, new_path)
+                if img.endswith(".png"):
+                    old_path = os.path.join(data_dir, label, img)
+                    new_path = os.path.join(save_dir, "Skippocytes", f"{current_idx}.jpg")
+                    os.system(f"convert {old_path} {new_path}")
+                else:
+                    old_path = os.path.join(data_dir, label, img)
+                    new_path = os.path.join(save_dir, "Skippocytes", f"{current_idx}.jpg")
+                    shutil.copyfile(old_path, new_path)
 
                 metadata["idx"].append(current_idx)
                 metadata["path"].append(old_path)
@@ -67,12 +72,17 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
             for img in os.listdir(os.path.join(data_dir, label)):
 
                 # make sure the img is an image file
-                if not img.endswith(".jpg"):
+                if not img.endswith(".jpg") and not img.endswith(".png"):
                     continue
 
-                old_path = os.path.join(data_dir, label, img)
-                new_path = os.path.join(save_dir, "Skippocytes", f"{current_idx}.jpg")
-                shutil.copyfile(old_path, new_path)
+                if img.endswith(".png"):
+                    old_path = os.path.join(data_dir, label, img)
+                    new_path = os.path.join(save_dir, "Skippocytes", f"{current_idx}.jpg")
+                    os.system(f"convert {old_path} {new_path}")
+                else:
+                    old_path = os.path.join(data_dir, label, img)
+                    new_path = os.path.join(save_dir, "Skippocytes", f"{current_idx}.jpg")
+                    shutil.copyfile(old_path, new_path)
 
                 metadata["idx"].append(current_idx)
                 metadata["path"].append(old_path)
@@ -83,14 +93,20 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
         elif label == "M1":
             for img in os.listdir(os.path.join(data_dir, label)):
 
-                # make sure the img is an image file
-                if not img.endswith(".jpg"):
+                # make sure the img is an image file, check jpg and png
+                if not (img.endswith(".jpg") and not img.endswith(".png")):
                     continue
 
-                old_path = os.path.join(data_dir, label, img)
-                new_path = os.path.join(save_dir, "Blasts", f"{current_idx}.jpg")
-                shutil.copyfile(old_path, new_path)
-
+                # if the file ends with png, convert it to jpg
+                if img.endswith(".png"):
+                    old_path = os.path.join(data_dir, label, img)
+                    new_path = os.path.join(save_dir, "Blasts", f"{current_idx}.jpg")
+                    os.system(f"convert {old_path} {new_path}")
+                else:
+                    old_path = os.path.join(data_dir, label, img)
+                    new_path = os.path.join(save_dir, "Blasts", f"{current_idx}.jpg")
+                    shutil.copyfile(old_path, new_path)
+                
                 metadata["idx"].append(current_idx)
                 metadata["path"].append(old_path)
                 metadata["label"].append(label)
@@ -102,12 +118,18 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
             for img in os.listdir(os.path.join(data_dir, label)):
 
                 # make sure the img is an image file
-                if not img.endswith(".jpg"):
+                if not (img.endswith(".jpg") and not img.endswith(".png")):
                     continue
 
-                old_path = os.path.join(data_dir, label, img)
-                new_path = os.path.join(save_dir, "OtherWBCs", f"{current_idx}.jpg")
-                shutil.copyfile(old_path, new_path)
+                # if the file ends with png, convert it to jpg
+                if img.endswith(".png"):
+                    old_path = os.path.join(data_dir, label, img)
+                    new_path = os.path.join(save_dir, "OtherWBCs", f"{current_idx}.jpg")
+                    os.system(f"convert {old_path} {new_path}")
+                else:
+                    old_path = os.path.join(data_dir, label, img)
+                    new_path = os.path.join(save_dir, "OtherWBCs", f"{current_idx}.jpg")
+                    shutil.copyfile(old_path, new_path)
 
                 metadata["idx"].append(current_idx)
                 metadata["path"].append(old_path)
