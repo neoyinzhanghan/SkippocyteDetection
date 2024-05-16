@@ -126,4 +126,9 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
 metadata_df = pd.DataFrame(metadata)
 
 metadata_df.to_csv(os.path.join(save_dir, "metadata.csv"), index=False)
+
+# print the number of images in each class
+print("Number of images in each class:")
+print(metadata_df["class"].value_counts())
+
 print("Done.")
