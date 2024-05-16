@@ -55,8 +55,8 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
 
                 if img.endswith(".png"):
                     old_path = os.path.join(data_dir, label, img)
-                    new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
-                    os.system(f"convert {old_path} {new_path}")
+                    new_path = os.path.join(save_dir, "bad", f"{current_idx}.png")
+                    shutil.copyfile(old_path, new_path)
                 else:
                     old_path = os.path.join(data_dir, label, img)
                     new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
@@ -80,8 +80,8 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
 
                 if img.endswith(".png"):
                     old_path = os.path.join(data_dir, label, img)
-                    new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
-                    os.system(f"convert {old_path} {new_path}")
+                    new_path = os.path.join(save_dir, "bad", f"{current_idx}.png")
+                    shutil.copyfile(old_path, new_path)
                 else:
                     old_path = os.path.join(data_dir, label, img)
                     new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
@@ -105,8 +105,8 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 # if the file ends with png, convert it to jpg
                 if img.endswith(".png"):
                     old_path = os.path.join(data_dir, label, img)
-                    new_path = os.path.join(save_dir, "good", f"{current_idx}.jpg")
-                    os.system(f"convert {old_path} {new_path}")
+                    new_path = os.path.join(save_dir, "good", f"{current_idx}.png")
+                    shutil.copyfile(old_path, new_path)
                 else:
                     old_path = os.path.join(data_dir, label, img)
                     new_path = os.path.join(save_dir, "good", f"{current_idx}.jpg")
