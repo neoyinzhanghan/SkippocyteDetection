@@ -2,6 +2,7 @@ import os
 import shutil
 import pandas as pd
 from tqdm import tqdm
+from PIL import Image
 
 data_dirs = [
     "/media/ssd2/dh_labelled_data/DeepHeme1/UCSF_repo",
@@ -53,17 +54,23 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 if not img.endswith(".jpg") and not img.endswith(".png"):
                     continue
 
-                if img.endswith(".png"):
-                    old_path = os.path.join(data_dir, label, img)
-                    new_path = os.path.join(save_dir, "bad", f"{current_idx}.png")
-                    shutil.copyfile(old_path, new_path)
-                else:
-                    old_path = os.path.join(data_dir, label, img)
-                    new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
-                    shutil.copyfile(old_path, new_path)
+                # open the image using PIL
+                # then save it as a jpg in the bad directory
+
+                image_pil = Image.open(os.path.join(data_dir, label, img))
+                image_pil.save(os.path.join(save_dir, "bad", f"{current_idx}.jpg"))
+
+                # if img.endswith(".png"):
+                #     old_path = os.path.join(data_dir, label, img)
+                #     new_path = os.path.join(save_dir, "bad", f"{current_idx}.png")
+                #     shutil.copyfile(old_path, new_path)
+                # else:
+                #     old_path = os.path.join(data_dir, label, img)
+                #     new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
+                #     shutil.copyfile(old_path, new_path)
 
                 metadata["idx"].append(current_idx)
-                metadata["path"].append(old_path)
+                metadata["path"].append(os.path.join(data_dir, label, img))
                 metadata["label"].append(label)
                 metadata["class"].append("bad")
 
@@ -78,17 +85,14 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 if not img.endswith(".jpg") and not img.endswith(".png"):
                     continue
 
-                if img.endswith(".png"):
-                    old_path = os.path.join(data_dir, label, img)
-                    new_path = os.path.join(save_dir, "bad", f"{current_idx}.png")
-                    shutil.copyfile(old_path, new_path)
-                else:
-                    old_path = os.path.join(data_dir, label, img)
-                    new_path = os.path.join(save_dir, "bad", f"{current_idx}.jpg")
-                    shutil.copyfile(old_path, new_path)
+                # open the image using PIL
+                # then save it as a jpg in the bad directory
+
+                image_pil = Image.open(os.path.join(data_dir, label, img))
+                image_pil.save(os.path.join(save_dir, "bad", f"{current_idx}.jpg"))
 
                 metadata["idx"].append(current_idx)
-                metadata["path"].append(old_path)
+                metadata["path"].append(os.path.join(data_dir, label, img))
                 metadata["label"].append(label)
                 metadata["class"].append("bad")
 
@@ -102,18 +106,14 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 if not (img.endswith(".jpg") and not img.endswith(".png")):
                     continue
 
-                # if the file ends with png, convert it to jpg
-                if img.endswith(".png"):
-                    old_path = os.path.join(data_dir, label, img)
-                    new_path = os.path.join(save_dir, "good", f"{current_idx}.png")
-                    shutil.copyfile(old_path, new_path)
-                else:
-                    old_path = os.path.join(data_dir, label, img)
-                    new_path = os.path.join(save_dir, "good", f"{current_idx}.jpg")
-                    shutil.copyfile(old_path, new_path)
+                # open the image using PIL
+                # then save it as a jpg in the good directory
+
+                image_pil = Image.open(os.path.join(data_dir, label, img))
+                image_pil.save(os.path.join(save_dir, "good", f"{current_idx}.jpg"))
 
                 metadata["idx"].append(current_idx)
-                metadata["path"].append(old_path)
+                metadata["path"].append(os.path.join(data_dir, label, img))
                 metadata["label"].append(label)
                 metadata["class"].append("good")
 
