@@ -58,6 +58,9 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 # then save it as a jpg in the bad directory
 
                 image_pil = Image.open(os.path.join(data_dir, label, img))
+                # if RGBA then convert to RGB
+                if image_pil.mode == "RGBA":
+                    image_pil = image_pil.convert("RGB")
                 image_pil.save(os.path.join(save_dir, "bad", f"{current_idx}.jpg"))
 
                 # if img.endswith(".png"):
@@ -89,6 +92,9 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 # then save it as a jpg in the bad directory
 
                 image_pil = Image.open(os.path.join(data_dir, label, img))
+                # if RGBA then convert to RGB
+                if image_pil.mode == "RGBA":
+                    image_pil = image_pil.convert("RGB")
                 image_pil.save(os.path.join(save_dir, "bad", f"{current_idx}.jpg"))
 
                 metadata["idx"].append(current_idx)
@@ -110,6 +116,9 @@ for data_dir in tqdm(data_dirs, desc="Processing Data Directories"):
                 # then save it as a jpg in the good directory
 
                 image_pil = Image.open(os.path.join(data_dir, label, img))
+                # if RGBA then convert to RGB
+                if image_pil.mode == "RGBA":
+                    image_pil = image_pil.convert("RGB")
                 image_pil.save(os.path.join(save_dir, "good", f"{current_idx}.jpg"))
 
                 metadata["idx"].append(current_idx)
